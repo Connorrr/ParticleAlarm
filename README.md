@@ -1,8 +1,10 @@
 # Particle Alarm (Based off Alarm-ios-swift)
 
-Upgraded to ios10 and swift 3!      
-This project aims to create a clone of the apple's official clock alarm application for study purpose and will come with a series of tutorial (not written yet though).    
-Now the clone looks pretty much like the official one and could work properly, have a try!
+Based off natsu1211's unfinished [code](https://github.com/natsu1211/Alarm-ios-swift)this project aims to create an IoT alarm.
+Designed to be used with the Particle Photon, the app allows a user to login to 
+their Particle account, take display and select their devices and trigger a 
+specific function on it's firmware.
+
 
 ##Caution
 Dirty code! Just to show the essential aspects of writing a alarm app.  
