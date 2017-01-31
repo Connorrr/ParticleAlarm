@@ -1,4 +1,4 @@
-# Alarm-ios-swift
+# Particle Alarm (Based off Alarm-ios-swift)
 
 Upgraded to ios10 and swift 3!      
 This project aims to create a clone of the apple's official clock alarm application for study purpose and will come with a series of tutorial (not written yet though).    
