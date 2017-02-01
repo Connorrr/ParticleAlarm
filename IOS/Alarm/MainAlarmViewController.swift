@@ -33,9 +33,11 @@ class MainAlarmViewController: UITableViewController, SparkDeviceDelegate{
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         super.viewWillAppear(animated)
         tableView.reloadData()
+        
+        self.navigationController?.isNavigationBarHidden = false
+        
         //dynamically append the edit button
         if Alarms.sharedInstance.count != 0
         {

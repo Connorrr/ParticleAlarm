@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ToQ-1c-Pyd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Fka-Pj-3pC">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -10,6 +10,22 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="X7W-gb-HiP">
+            <objects>
+                <navigationController id="Fka-Pj-3pC" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Cxj-vD-tM6">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="ToQ-1c-Pyd" kind="relationship" relationship="rootViewController" id="pgh-lH-mWZ"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qYf-oU-ZMg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-921" y="-250"/>
+        </scene>
         <!--Splash View Controller-->
         <scene sceneID="HCV-SC-dWd">
             <objects>
@@ -23,13 +39,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="MHx-Pb-nnO"/>
                     <connections>
                         <segue destination="mRm-tb-2g0" kind="show" identifier="SplashToAlarmSegue" id="TmK-vk-MhU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4h9-Lu-c5i" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-18.399999999999999" y="-249.62518740629687"/>
+            <point key="canvasLocation" x="33" y="-249"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="gbY-cu-bM4">
@@ -45,7 +62,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Twf-89-a8G" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="953" y="-248"/>
+            <point key="canvasLocation" x="1038" y="-249"/>
         </scene>
         <!--Alarm-->
         <scene sceneID="1K5-R3-JmD">
@@ -98,7 +115,7 @@
                             </barButtonItem>
                             <barButtonItem style="plain" id="cYv-7A-tGJ">
                                 <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Jdo-Lq-7rx">
-                                    <rect key="frame" x="239.5" y="7" width="83" height="30"/>
+                                    <rect key="frame" x="241" y="7" width="83" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal" title="pNg"/>
                                     <connections>

@@ -30,6 +30,8 @@ class SplashViewController: UIViewController, HolderViewDelegate, UITextFieldDel
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.navigationController?.isNavigationBarHidden = true    // Remove Animation Bar
+        
         if(self.supportedInterfaceOrientations == UIInterfaceOrientationMask.portrait && UIDevice.current.orientation != UIDeviceOrientation.portrait)
         {
             let value = UIInterfaceOrientation.portrait.rawValue

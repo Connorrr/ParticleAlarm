@@ -63,6 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
        
         if isSnooze  == true
         {
+            print("Snooze index is \(index)")
             let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
             let now = Date()
             //snooze 9 minutes later
@@ -78,20 +79,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
         
         let stopOption = UIAlertAction(title: "OK", style: .default) {
             (action:UIAlertAction)->Void in self.audioPlayer?.stop()
+            print("Stop index is \(index)")
             Alarms.sharedInstance.setEnabled(false, AtIndex: index)
             let vc = self.window?.rootViewController! as! UINavigationController
-            let cells = (vc.topViewController as! MainAlarmViewController).tableView.visibleCells 
-            for cell in cells
-            {
-                if cell.tag == index{
-                    let sw = cell.accessoryView as! UISwitch
-                    sw.setOn(false, animated: false)
+            for viewCon in vc.viewControllers {
+                if let mainVC = viewCon as? MainAlarmViewController {
+                    print("Found the mainViewController")
+                    let cells = mainVC.tableView.visibleCells
+                    for cell in cells
+                    {
+                        if cell.tag == index{
+                            print("Found the cell")
+                            let sw = cell.accessoryView as! UISwitch
+                            sw.setOn(false, animated: false)
+                        }
+                    }
                 }
-            }}
+            }
+        }
         
         storageController.addAction(stopOption)
-        window?.rootViewController!.present(storageController, animated: true, completion: nil)
         
+        if let wd = self.window {
+            var vc = wd.rootViewController
+            if(vc is UINavigationController){
+                vc = (vc as! UINavigationController).visibleViewController
+                vc?.present(storageController, animated: true, completion: nil)
+            }else{
+                window?.rootViewController!.present(storageController, animated: true, completion: nil)
+            }
+        }
   
         
     }
