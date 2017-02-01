@@ -67,7 +67,7 @@
         <!--Alarm-->
         <scene sceneID="1K5-R3-JmD">
             <objects>
-                <tableViewController id="TFz-Z9-qBx" customClass="MainAlarmViewController" customModule="Particle_Alarm" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MainVC" id="TFz-Z9-qBx" customClass="MainAlarmViewController" customModule="Particle_Alarm" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="bQK-Ff-qGY">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

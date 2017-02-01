@@ -80,20 +80,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
         let stopOption = UIAlertAction(title: "OK", style: .default) {
             (action:UIAlertAction)->Void in self.audioPlayer?.stop()
             print("Stop index is \(index)")
-            Alarms.sharedInstance.setEnabled(false, AtIndex: index)
-            let vc = self.window?.rootViewController! as! UINavigationController
-            for viewCon in vc.viewControllers {
-                if let mainVC = viewCon as? MainAlarmViewController {
-                    print("Found the mainViewController")
-                    let cells = mainVC.tableView.visibleCells
-                    for cell in cells
-                    {
-                        if cell.tag == index{
-                            print("Found the cell")
-                            let sw = cell.accessoryView as! UISwitch
-                            sw.setOn(false, animated: false)
-                        }
-                    }
+            //Alarms.sharedInstance.setEnabled(false, AtIndex: index)
+            let sb = UIStoryboard(name: "Main", bundle: nil)
+            let mainVC = sb.instantiateViewController(withIdentifier: "MainVC")
+            dump(mainVC)
+            let cells = (mainVC as! MainAlarmViewController).tableView.visibleCells
+            dump(cells)
+            for cell in cells
+            {
+                if cell.tag == index{
+                    print("Found the cell")
+                    let sw = cell.accessoryView as! UISwitch
+                    sw.setOn(false, animated: false)
                 }
             }
         }
