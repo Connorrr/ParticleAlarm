@@ -11,12 +11,11 @@ import Foundation
 import AudioToolbox
 import AVFoundation
 import ParticleSDK
+import UserNotifications
 
-protocol AlarmApplicationDelegate
-{
-
+protocol AlarmApplicationDelegate {
     func playAlarmSound(_ soundName: String)
-   
+    func brewCoffee()
 }
 
 @UIApplicationMain
@@ -81,19 +80,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
             (action:UIAlertAction)->Void in self.audioPlayer?.stop()
             print("Stop index is \(index)")
             //Alarms.sharedInstance.setEnabled(false, AtIndex: index)
-            let sb = UIStoryboard(name: "Main", bundle: nil)
-            let mainVC = sb.instantiateViewController(withIdentifier: "MainVC")
-            dump(mainVC)
-            let cells = (mainVC as! MainAlarmViewController).tableView.visibleCells
-            dump(cells)
-            for cell in cells
-            {
-                if cell.tag == index{
-                    print("Found the cell")
-                    let sw = cell.accessoryView as! UISwitch
-                    sw.setOn(false, animated: false)
-                }
-            }
+            //let sb = UIStoryboard(name: "Main", bundle: nil)
+            //let mainVC = sb.instantiateViewController(withIdentifier: "MainVC")
+            self.brewCoffee()
+            
         }
         
         storageController.addAction(stopOption)
@@ -207,13 +197,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-    func testCloudSDK()
+    func brewCoffee()
     {
+        print("Brewing Coffee from the AppDelegate")
         let loginGroup : DispatchGroup = DispatchGroup()
         let deviceGroup : DispatchGroup = DispatchGroup()
         let priority = DispatchQoS.QoSClass.default
-        let functionName = "testFunc"
-        let variableName = "testVar"
+        let functionName = "brewFunc"
+        //let variableName = "testVar"
         var myPhoton : SparkDevice? = nil
         var myEventId : AnyObject?
         
@@ -278,7 +269,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
             }
         }
         
-        
+        // MARK:  This code is used to subscribe to an event
         DispatchQueue.global(qos: priority).async {
             // logging in
             _ = deviceGroup.wait(timeout: DispatchTime.distantFuture)
@@ -286,7 +277,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
             
             print("subscribing to event...");
             var gotFirstEvent : Bool = false
-            myEventId = myPhoton!.subscribeToEvents(withPrefix: "test", handler: { (event: SparkEvent?, error:Error?) -> Void in
+            myEventId = myPhoton!.subscribeToEvents(withPrefix: "Coffee", handler: { (event: SparkEvent?, error:Error?) -> Void in
                 if (!gotFirstEvent) {
                     print("Got first event: "+event!.event)
                     gotFirstEvent = true
@@ -317,26 +308,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
         
         
         // reading a variable
-        DispatchQueue.global(qos: priority).async {
-            // logging in
-            _ = deviceGroup.wait(timeout: DispatchTime.distantFuture) // 5
-            deviceGroup.enter();
-            
-            myPhoton!.getVariable(variableName, completion: { (result:Any?, error:Error?) -> Void in
-                if let _=error
-                {
-                    print("Failed reading variable "+variableName+" from device")
-                }
-                else
-                {
-                    if let res = result as? Int
-                    {
-                        print("Variable "+variableName+" value is \(res)")
-                        deviceGroup.leave()
-                    }
-                }
-            })
-        }
+        /*DispatchQueue.global(qos: priority).async {
+         // logging in
+         _ = deviceGroup.wait(timeout: DispatchTime.distantFuture) // 5
+         deviceGroup.enter();
+         
+         myPhoton!.getVariable(variableName, completion: { (result:Any?, error:Error?) -> Void in
+         if let _=error
+         {
+         print("Failed reading variable "+variableName+" from device")
+         }
+         else
+         {
+         if let res = result as? Int
+         {
+         print("Variable "+variableName+" value is \(res)")
+         deviceGroup.leave()
+         }
+         }
+         })
+         }*/
         
         
         // get device variables and functions
@@ -365,7 +356,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
             
             print("logged out")
         }
-        
     }
+
 }
 
