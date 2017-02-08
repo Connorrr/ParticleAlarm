@@ -155,19 +155,19 @@ class Scheduler : AlarmSchedulerDelegate
         content.userInfo = ["snooze" : snooze, "index": index, "soundName": soundName]
         
         let datesForNotification = correctDate(date, onWeekdaysForNotify:weekdays)
-        //let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+        let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
         
-        //print("Date Components:  ")
+        print("Date Components:  ")
         
         for d in datesForNotification
         {
             print("Garn for the trigger.  Here d d \(d)")
             //AlarmNotification.fireDate = d
             //UIApplication.shared.scheduleLocalNotification(AlarmNotification)
-            //let dateComponent = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: d)
-            //dump(dateComponent)
-            //let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: false)
-            let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 3, repeats: false)
+            let dateComponent = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: d)
+            dump(dateComponent)
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: false)
+            //let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 3, repeats: false)
             let request = UNNotificationRequest.init(identifier: "notify-test", content: content, trigger: trigger)
             
             let center = UNUserNotificationCenter.current()
