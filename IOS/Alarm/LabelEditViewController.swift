@@ -37,7 +37,7 @@ class LabelEditViewController: UIViewController, UITextFieldDelegate {
         Global.label = textField.text!
 
         //Becuase segue push is used
-        navigationController?.popViewController(animated: true)
+        //navigationController?.popViewController(animated: true)
         return false
     }
 

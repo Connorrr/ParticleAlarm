@@ -19,7 +19,7 @@ protocol AlarmApplicationDelegate {
 }
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, AlarmApplicationDelegate, SparkDeviceDelegate{
+class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, UNUserNotificationCenterDelegate, AlarmApplicationDelegate, SparkDeviceDelegate{
 
     var window: UIWindow?
     var audioPlayer: AVAudioPlayer?
@@ -34,8 +34,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
         //alarmDelegate? = self
         //alarmDelegate!.setupNotificationSettings()
         
-        alarmScheduler.setupNotificationSettings()
-        window?.tintColor = UIColor.red
+        let center = UNUserNotificationCenter.current()
+        center.delegate = self
+        center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
+            // Enable or disable features based on authorization.
+            if((error != nil)) {
+                print("Request authorization failed!")
+            }
+            else {
+                print("Request authorization succeeded!")
+                self.alarmScheduler.setupNotificationSettings()
+                self.window?.tintColor = UIColor.red
+                //self.showAlert()
+            }
+        }
         return true
     }
     
@@ -155,8 +167,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
         }
     }
     
+    //TODO:  Change this snooze system when notifications are working
     //notification handler, snooze
-    func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, for notification: UILocalNotification, completionHandler: @escaping () -> Void)
+    /*func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, for notification: UILocalNotification, completionHandler: @escaping () -> Void)
     {
         if identifier == "mySnooze"
         {
@@ -172,7 +185,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
         }
         }
         completionHandler()
-    }
+    }*/
     
     //AlarmApplicationDelegate protocol
     func playAlarmSound(_ soundName: String) {
@@ -201,10 +214,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
         audioPlayer!.numberOfLoops = -1
         audioPlayer!.play()
     }
-    
-        
-    
-    
     
     //todo,vibration infinity
     func vibrationCallback(_ id:SystemSoundID, _ callback:UnsafeMutableRawPointer) -> Void
