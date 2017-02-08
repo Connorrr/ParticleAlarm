@@ -29,7 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
         print("Device "+device.name!+" received system event id "+String(event.rawValue))
     }
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         //alarmDelegate? = self
@@ -40,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
         return true
     }
     
-    func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
+    /*func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
         
         /*AudioServicesAddSystemSoundCompletion(SystemSoundID(kSystemSoundID_Vibrate),nil,
             nil,
@@ -97,9 +96,65 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
                 window?.rootViewController!.present(storageController, animated: true, completion: nil)
             }
         }
-  
+    }*/
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void){
         
+        //if app is in foreground, show a alert
+        let storageController = UIAlertController(title: "Alarm", message: nil, preferredStyle: .alert)
+        
+        var isSnooze: Bool = false
+        var soundName: String = ""
+        var index: Int = -1
+        
+        let userInfo = response.notification.request.content.userInfo
+        isSnooze = userInfo[("snooze")] as! Bool
+        soundName = userInfo["soundName"] as! String
+        index = userInfo["index"] as! Int
+        
+        print("If there is nothing here then shits fucked:  \(soundName)")
+        
+        playAlarmSound(soundName)
+        
+        if isSnooze  == true
+        {
+            print("Snooze index is \(index)")
+            let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+            let now = Date()
+            //snooze 9 minutes later
+            let snoozeTime = (calendar as NSCalendar).date(byAdding: NSCalendar.Unit.minute, value: 9, to: now, options:.matchStrictly)!
+            
+            let snoozeOption = UIAlertAction(title: "Snooze", style: .default) {
+                (action:UIAlertAction)->Void in self.audioPlayer?.stop()
+                
+                self.alarmScheduler.setNotificationWithDate(snoozeTime, onWeekdaysForNotify: [Int](), snooze: true, soundName: soundName, index: index)
+            }
+            storageController.addAction(snoozeOption)
+        }
+        
+        let stopOption = UIAlertAction(title: "OK", style: .default) {
+            (action:UIAlertAction)->Void in self.audioPlayer?.stop()
+            print("Stop index is \(index)")
+            //Alarms.sharedInstance.setEnabled(false, AtIndex: index)
+            //let sb = UIStoryboard(name: "Main", bundle: nil)
+            //let mainVC = sb.instantiateViewController(withIdentifier: "MainVC")
+            self.brewCoffee()
+            
+        }
+        
+        storageController.addAction(stopOption)
+        
+        if let wd = self.window {
+            var vc = wd.rootViewController
+            if(vc is UINavigationController){
+                vc = (vc as! UINavigationController).visibleViewController
+                vc?.present(storageController, animated: true, completion: nil)
+            }else{
+                window?.rootViewController!.present(storageController, animated: true, completion: nil)
+            }
+        }
     }
+    
     //notification handler, snooze
     func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, for notification: UILocalNotification, completionHandler: @escaping () -> Void)
     {
@@ -117,11 +172,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, Al
         }
         }
         completionHandler()
-    }
-    //print out all registed NSNotification for debug
-    func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
-        print("THis part here is to affirm my sanity.......  (: ")
-        print(notificationSettings.types.rawValue)
     }
     
     //AlarmApplicationDelegate protocol

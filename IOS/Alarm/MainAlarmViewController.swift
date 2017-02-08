@@ -12,6 +12,7 @@ import UIKit
 import MediaPlayer
 import ParticleSDK
 import ParticleDeviceSetupLibrary
+import UserNotifications
 
 class MainAlarmViewController: UITableViewController, SparkDeviceDelegate{
     
@@ -51,7 +52,8 @@ class MainAlarmViewController: UITableViewController, SparkDeviceDelegate{
             self.navigationItem.leftBarButtonItem = nil
         }
         //unschedule all the notifications, faster than calling the cancelAllNotifications func
-        UIApplication.shared.scheduledLocalNotifications = nil
+        //UIApplication.shared.scheduledLocalNotifications = nil
+        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
         
         let cells = tableView.visibleCells
         if !cells.isEmpty

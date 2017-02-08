@@ -23,18 +23,22 @@ class Scheduler : AlarmSchedulerDelegate
     func setupNotificationSettings() {
         
         // Specify the notification types.
+        let newNotificationTypes: UNAuthorizationOptions = [UNAuthorizationOptions.alert, UNAuthorizationOptions.sound]
         let notificationTypes: UIUserNotificationType = [UIUserNotificationType.alert, UIUserNotificationType.sound]
         
         
         // Specify the notification actions.
         let stopAction = UIMutableUserNotificationAction()
+        let newStopAction = UNNotificationAction(identifier: "myStop", title: "OK", options: [.foreground])
         stopAction.identifier = "myStop"
         stopAction.title = "OK"
         stopAction.activationMode = UIUserNotificationActivationMode.background
         stopAction.isDestructive = false
         stopAction.isAuthenticationRequired = false
+        //newStopAction.activ
         
         let snoozeAction = UIMutableUserNotificationAction()
+        //let newSnoozeAction = UNNotificationAction(identifier: "mySnooze", title: "Snooze", options: [.foreground])
         snoozeAction.identifier = "mySnooze"
         snoozeAction.title = "Snooze"
         snoozeAction.activationMode = UIUserNotificationActivationMode.background
@@ -43,9 +47,12 @@ class Scheduler : AlarmSchedulerDelegate
         
         
         let actionsArray = [UIUserNotificationAction](arrayLiteral: snoozeAction, stopAction)
+        //let newActionsArray = [newSnoozeAction, newSnoozeAction]
         let actionsArrayMinimal = [UIUserNotificationAction](arrayLiteral: snoozeAction, stopAction)
+        //let newActionsArrayMinimal = [newSnoozeAction, newStopAction]
         // Specify the category related to the above actions.
         let alarmCategory = UIMutableUserNotificationCategory()
+        //let newAlarmCategory = UNNotificationCategory(identifier: "myAlarmCategory", actions: newActionsArray, intentIdentifiers: [""], options: [.allowInCarPlay])
         alarmCategory.identifier = "myAlarmCategory"
         alarmCategory.setActions(actionsArray, for: .default)
         alarmCategory.setActions(actionsArrayMinimal, for: .minimal)
@@ -56,7 +63,9 @@ class Scheduler : AlarmSchedulerDelegate
         
         // Register the notification settings.
         let newNotificationSettings = UIUserNotificationSettings(types: notificationTypes, categories: categoriesForSettings)
+        //let newNewNotificationSettings = getNotificationSettings(
         UIApplication.shared.registerUserNotificationSettings(newNotificationSettings)
+        //UIApplication.shared.register
         //}
     }
     
@@ -99,7 +108,6 @@ class Scheduler : AlarmSchedulerDelegate
                 {
                     
                     wdDate =  (calendar as NSCalendar).date(byAdding: NSCalendar.Unit.day, value: wd+daysInWeek-weekday, to: date, options:.matchStrictly)!
-                    
                 }
                 else if wd == weekday
                 {
@@ -156,5 +164,4 @@ class Scheduler : AlarmSchedulerDelegate
             }
         }
     }
-
 }
