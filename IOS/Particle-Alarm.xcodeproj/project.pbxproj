@@ -98,6 +98,8 @@
 		BF79E4861E30420F00C0757E /* ParticleSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParticleSDK.framework; path = Carthage/Build/iOS/ParticleSDK.framework; sourceTree = "<group>"; };
 		BFCBE1481E3AE7EC0037E937 /* CSV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSV.swift; sourceTree = "<group>"; };
 		BFCBE14A1E3AEEFB0037E937 /* ParticleAccountDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParticleAccountDetails.swift; sourceTree = "<group>"; };
+		BFCBE1751E4ABB650037E937 /* bell.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = bell.caf; path = Sounds/bell.caf; sourceTree = "<group>"; };
+		BFCBE1761E4ABB650037E937 /* tickle.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = tickle.caf; path = Sounds/tickle.caf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 		9EED786E1AA0F03F00961BC2 /* Alarm */ = {
 			isa = PBXGroup;
 			children = (
+				BFCBE1741E4AB8FF0037E937 /* Sounds */,
 				BF1B3E711E38663900BD8641 /* Daisy Chain */,
 				BFCBE14A1E3AEEFB0037E937 /* ParticleAccountDetails.swift */,
 				9EEEC58B1BC641BF00459CF7 /* MainAlarmViewController.swift */,
@@ -221,6 +224,15 @@
 				BF79E4861E30420F00C0757E /* ParticleSDK.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BFCBE1741E4AB8FF0037E937 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				BFCBE1751E4ABB650037E937 /* bell.caf */,
+				BFCBE1761E4ABB650037E937 /* tickle.caf */,
+			);
+			name = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

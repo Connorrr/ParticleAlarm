@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 # ignore xCode generated UI files
+=======
+# ignore UI xCode generated files
+>>>>>>> NotificationSystemUpdate
 *.xcuserstate

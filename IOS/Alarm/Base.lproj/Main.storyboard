@@ -113,9 +113,9 @@
                                     <segue destination="XKb-lA-7Db" kind="presentation" identifier="addSegue" id="Okr-Zd-u6D"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem style="plain" id="cYv-7A-tGJ">
+                            <barButtonItem id="cYv-7A-tGJ">
                                 <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Jdo-Lq-7rx">
-                                    <rect key="frame" x="241" y="7" width="83" height="30"/>
+                                    <rect key="frame" x="239.5" y="7" width="83" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal" title="pNg"/>
                                     <connections>
