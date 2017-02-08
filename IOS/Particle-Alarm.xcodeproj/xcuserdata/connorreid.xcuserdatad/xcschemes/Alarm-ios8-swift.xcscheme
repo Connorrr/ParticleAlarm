@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "9EED78801AA0F03F00961BC2"
-               BuildableName = "Alarm-ios8-swiftTests.xctest"
+               BuildableName = "Particle-AlarmTests.xctest"
                BlueprintName = "Particle-AlarmTests"
                ReferencedContainer = "container:Particle-Alarm.xcodeproj">
             </BuildableReference>
