@@ -28,6 +28,7 @@
 		BF1B3E6F1E31ABCC00BD8641 /* Slice.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1B3E6A1E31ABCC00BD8641 /* Slice.swift */; };
 		BF1B3E701E31ABCC00BD8641 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1B3E6B1E31ABCC00BD8641 /* SplashViewController.swift */; };
 		BF1B3E731E38672100BD8641 /* DCTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1B3E721E38672100BD8641 /* DCTextField.swift */; };
+		BF5287891E4C238700B77400 /* DCTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5287881E4C238700B77400 /* DCTableViewCell.swift */; };
 		BF79E4871E30420F00C0757E /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF79E4831E30420F00C0757E /* AFNetworking.framework */; };
 		BF79E4881E30420F00C0757E /* OnePasswordExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF79E4841E30420F00C0757E /* OnePasswordExtension.framework */; };
 		BF79E4891E30420F00C0757E /* ParticleDeviceSetupLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF79E4851E30420F00C0757E /* ParticleDeviceSetupLibrary.framework */; };
@@ -92,6 +93,7 @@
 		BF1B3E6A1E31ABCC00BD8641 /* Slice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Slice.swift; path = Splash/Slice.swift; sourceTree = "<group>"; };
 		BF1B3E6B1E31ABCC00BD8641 /* SplashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SplashViewController.swift; path = Splash/SplashViewController.swift; sourceTree = "<group>"; };
 		BF1B3E721E38672100BD8641 /* DCTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DCTextField.swift; sourceTree = "<group>"; };
+		BF5287881E4C238700B77400 /* DCTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DCTableViewCell.swift; path = ../DCTableViewCell.swift; sourceTree = "<group>"; };
 		BF79E4831E30420F00C0757E /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = Carthage/Build/iOS/AFNetworking.framework; sourceTree = "<group>"; };
 		BF79E4841E30420F00C0757E /* OnePasswordExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OnePasswordExtension.framework; path = Carthage/Build/iOS/OnePasswordExtension.framework; sourceTree = "<group>"; };
 		BF79E4851E30420F00C0757E /* ParticleDeviceSetupLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParticleDeviceSetupLibrary.framework; path = Carthage/Build/iOS/ParticleDeviceSetupLibrary.framework; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 			children = (
 				BF1B3E661E31ABB900BD8641 /* Splash */,
 				BFCBE1481E3AE7EC0037E937 /* CSV.swift */,
+				BF5287881E4C238700B77400 /* DCTableViewCell.swift */,
 				BF1B3E721E38672100BD8641 /* DCTextField.swift */,
 			);
 			name = "Daisy Chain";
@@ -369,6 +372,7 @@
 				BF1B3E6C1E31ABCC00BD8641 /* Colours.swift in Sources */,
 				BFCBE14B1E3AEEFB0037E937 /* ParticleAccountDetails.swift in Sources */,
 				BF1B3E6F1E31ABCC00BD8641 /* Slice.swift in Sources */,
+				BF5287891E4C238700B77400 /* DCTableViewCell.swift in Sources */,
 				9E1F30731C49128000C66F79 /* Scheduler.swift in Sources */,
 				9E16062C1C62358F009B2407 /* MediaTableViewController.swift in Sources */,
 				BF1B3E701E31ABCC00BD8641 /* SplashViewController.swift in Sources */,

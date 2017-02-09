@@ -22,51 +22,16 @@ class Scheduler : AlarmSchedulerDelegate
 {
     func setupNotificationSettings() {
         print("We settin up these notifications or shittin our pants")
-
-        // Specify the notification types.
-        //let newNotificationTypes: UNAuthorizationOptions = [UNAuthorizationOptions.alert, UNAuthorizationOptions.sound]
-        //let notificationTypes: UIUserNotificationType = [UIUserNotificationType.alert, UIUserNotificationType.sound]
         
-        
-        // Specify the notification actions.
-        //let stopAction = UIMutableUserNotificationAction()
         let newStopAction = UNNotificationAction(identifier: "myStop", title: "OK", options: [])
-        //stopAction.identifier = "myStop"
-        //stopAction.title = "OK"
-        //stopAction.activationMode = UIUserNotificationActivationMode.background
-        //stopAction.isDestructive = false
-        //stopAction.isAuthenticationRequired = false
-        //newStopAction.activ
         
-        //let snoozeAction = UIMutableUserNotificationAction()
         let newSnoozeAction = UNNotificationAction(identifier: "mySnooze", title: "Snooze", options: [])
-        //snoozeAction.identifier = "mySnooze"
-        //snoozeAction.title = "Snooze"
-        //snoozeAction.activationMode = UIUserNotificationActivationMode.background
-        //snoozeAction.isDestructive = false
-        //snoozeAction.isAuthenticationRequired = false
         
-        //let actionsArray = [UIUserNotificationAction](arrayLiteral: snoozeAction, stopAction)
         let newActionsArray = [newStopAction, newSnoozeAction]
-        //let actionsArrayMinimal = [UIUserNotificationAction](arrayLiteral: snoozeAction, stopAction)
-        //let newActionsArrayMinimal = [newSnoozeAction, newStopAction]
-        // Specify the category related to the above actions.
-        //let alarmCategory = UIMutableUserNotificationCategory()
+
         let newAlarmCategory = UNNotificationCategory(identifier: "myAlarmCategory", actions: newActionsArray, intentIdentifiers: [], options: [.customDismissAction])
-        //alarmCategory.identifier = "myAlarmCategory"
-        //alarmCategory.setActions(actionsArray, for: .default)
-        //alarmCategory.setActions(actionsArrayMinimal, for: .minimal)
         
-        
-        //let categoriesForSettings = Set(arrayLiteral: alarmCategory)
-        
-        
-        // Register the notification settings.
-        //let newNotificationSettings = UIUserNotificationSettings(types: notificationTypes, categories: categoriesForSettings)
-        //let newNewNotificationSettings = getNotificationSettings(
-        //UIApplication.shared.registerUserNotificationSettings(newNotificationSettings)
         UNUserNotificationCenter.current().setNotificationCategories([newAlarmCategory])
-        //}
     }
     
     fileprivate func correctDate(_ date: Date, onWeekdaysForNotify weekdays:[Int]) -> [Date]
@@ -133,17 +98,6 @@ class Scheduler : AlarmSchedulerDelegate
     }
     
     func setNotificationWithDate(_ date: Date, onWeekdaysForNotify weekdays:[Int], snooze: Bool, soundName: String, index: Int) {
-        //let AlarmNotification: UILocalNotification = UILocalNotification()
-        //AlarmNotification.alertBody = "Wake Up!"
-        //AlarmNotification.alertAction = "Open App"
-        //AlarmNotification.category = "myAlarmCategory"
-        //AlarmNotification.applicationIconBadgeNumber = 0
-        //AlarmNotification.repeatCalendar = calendar
-        //TODO, not working
-        //AlarmNotification.repeatInterval = NSCalendarUnit.CalendarUnitWeekOfYear
-        //AlarmNotification.soundName = soundName + ".mp3"
-        //AlarmNotification.timeZone = TimeZone.current
-        //AlarmNotification.userInfo = ["snooze" : snooze, "index": index, "soundName": soundName]
 
         //  Updated Notifications
         let content = UNMutableNotificationContent()
@@ -162,12 +116,10 @@ class Scheduler : AlarmSchedulerDelegate
         for d in datesForNotification
         {
             print("Garn for the trigger.  Here d d \(d)")
-            //AlarmNotification.fireDate = d
-            //UIApplication.shared.scheduleLocalNotification(AlarmNotification)
+ 
             let dateComponent = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: d)
             dump(dateComponent)
             let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: false)
-            //let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 3, repeats: false)
             let request = UNNotificationRequest.init(identifier: "notify-test", content: content, trigger: trigger)
             
             let center = UNUserNotificationCenter.current()
@@ -177,7 +129,6 @@ class Scheduler : AlarmSchedulerDelegate
     }
     
     func reSchedule() {
-        //UIApplication.shared.cancelAllLocalNotifications()
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
         for i in 0..<Alarms.sharedInstance.count{
             let alarm = Alarms.sharedInstance[i]
