@@ -10,10 +10,14 @@ import UIKit
 
 class DCTableViewCell: UITableViewCell {
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override convenience init(style: UITableViewCellStyle, reuseIdentifier: String?){
+        self.init(style: style, reuseIdentifier: reuseIdentifier, colour: Colours.mustard)
+    }
+    
+    init(style: UITableViewCellStyle, reuseIdentifier: String?, colour: UIColor?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        
+        self.backgroundColor = colour
         
     }
     
