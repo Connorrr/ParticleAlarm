@@ -125,8 +125,6 @@ class MainAlarmViewController: UITableViewController, SparkDeviceDelegate{
     
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        
         if isEditing
         {
             Global.indexOfCell = indexPath.row

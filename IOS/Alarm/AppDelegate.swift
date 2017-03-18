@@ -262,7 +262,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, UN
         let loginGroup : DispatchGroup = DispatchGroup()
         let deviceGroup : DispatchGroup = DispatchGroup()
         let priority = DispatchQoS.QoSClass.default
-        let functionName = "brewFunc"
+        let functionName = "onOffFunc"
         //let variableName = "testVar"
         var myPhoton : SparkDevice? = nil
         var myEventId : AnyObject?

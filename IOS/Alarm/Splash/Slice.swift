@@ -56,7 +56,7 @@ class Slice: CAShapeLayer {
             
             //  First Triangle (2)
             firstPoint = CGPoint(x: 0, y: 0)            //  Top
-            secondPoint = CGPoint(x: width, y: 0)    //  Bottom
+            secondPoint = CGPoint(x: width, y: 0)       //  Bottom
             thirdPoint = getRadiusPoint(refAngle, radius: width/4)
             fourthPoint = CGPoint.zero
             let second = [firstPoint, secondPoint, thirdPoint, fourthPoint]
