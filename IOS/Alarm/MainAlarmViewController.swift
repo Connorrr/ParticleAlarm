@@ -58,7 +58,7 @@ class MainAlarmViewController: UITableViewController, SparkDeviceDelegate{
         let cells = tableView.visibleCells
         if !cells.isEmpty
         {
-            assert( cells.count==Alarms.sharedInstance.count, "alarms not been updated correctly")
+            //assert( cells.count==Alarms.sharedInstance.count, "alarms not been updated correctly")
             var count = cells.count
             while count>0
             {

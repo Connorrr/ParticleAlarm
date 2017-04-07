@@ -16,6 +16,7 @@ import UserNotifications
 protocol AlarmApplicationDelegate {
     func playAlarmSound(_ soundName: String)
     func brewCoffee()
+    func setAlarmOnParticle(alarmString: String)
 }
 
 @UIApplicationMain
@@ -255,25 +256,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, UN
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-    func brewCoffee()
-    {
-        print("Brewing Coffee from the AppDelegate")
-        let loginGroup : DispatchGroup = DispatchGroup()
-        let deviceGroup : DispatchGroup = DispatchGroup()
-        let priority = DispatchQoS.QoSClass.default
-        let functionName = "onOffFunc"
-        //let variableName = "testVar"
-        var myPhoton : SparkDevice? = nil
-        var myEventId : AnyObject?
-        
-        
-        // CHANGE THESE CONSANTS TO WHAT YOU NEED:
-        let deviceName = ParticleAccountDetails.devices[0]
-        let username = ParticleAccountDetails.uName!
-        let password = ParticleAccountDetails.pWord!
-        
-        
+    
+    
+    /// Logs into the Particle Cloud
+    ///
+    /// - Parameters:
+    ///   - username: Particle Username
+    ///   - password: Particle Password
+    ///   - priority: Priority Queue for Dispatch Queue
+    ///   - loginGroup: Dispatch Group for Login
+    ///   - deviceGroup: Device Group for retrieving Device info
+    func particleLogin(username: String, password: String, priority: DispatchQoS.QoSClass, loginGroup: DispatchGroup, deviceGroup: DispatchGroup){
         DispatchQueue.global(qos: priority).async {
             // logging in
             loginGroup.enter();
@@ -294,6 +287,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, UN
                 }
             })
         }
+    }
+    
+    
+    /// Returns the SparkDevice with specified name
+    ///
+    /// - Parameters:
+    ///   - priority: Priority Queue for Dispatch Queue
+    ///   - loginGroup: Dispatch Group for Login
+    ///   - deviceGroup: Device Group for retrieving Device info
+    ///   - deviceName: Particle Device name
+    /// - Returns: returns the Particle Device object or nil if not found
+    func getParticleDevice(priority: DispatchQoS.QoSClass, loginGroup: DispatchGroup, deviceGroup: DispatchGroup, deviceName: String, myPhotonPointer: UnsafeMutablePointer<SparkDevice?>){
+        
+        let devicePointer = UnsafeMutablePointer<SparkDevice?>(myPhotonPointer)
+        
+        if devicePointer.pointee == nil {
+            print("WTF I thought u and me were bros device?  Where are you?")
+        }
         
         DispatchQueue.global(qos: priority).async {
             // logging in
@@ -313,13 +324,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, UN
                         {
                             if device.name == deviceName
                             {
+                                
                                 print("found a device with name "+deviceName+" in your account")
-                                myPhoton = device
+                                devicePointer.pointee = device
                                 deviceGroup.leave()
                             }
                             
                         }
-                        if (myPhoton == nil)
+                        if (devicePointer.pointee == nil)
                         {
                             print("device with name "+deviceName+" was not found in your account")
                         }
@@ -327,6 +339,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, UN
                 }
             }
         }
+    }
+    
+    
+    /// Subscribe to Particle Cloud event with prefix
+    ///
+    /// - Parameters:
+    ///   - prefix: event prefix to listen for
+    ///   - priority: Priority Queue for Dispatch Queue
+    ///   - deviceGroup: Device Group for retrieving Device info
+    ///   - myPhoton: Particle Device transmitting the event
+    /// - Returns: Returns the event Id
+    func subscribeToEventWithPrefix(prefix: String, priority: DispatchQoS.QoSClass, deviceGroup: DispatchGroup, myPhotonPointer: UnsafePointer<SparkDevice?>, myEventIdPointer: UnsafeMutablePointer<AnyObject?>){
+        
+        let devicePointer = UnsafePointer<SparkDevice?>(myPhotonPointer)
+        let eventIdPointer = UnsafeMutablePointer<AnyObject?>(myEventIdPointer)
         
         // MARK:  This code is used to subscribe to an event
         DispatchQueue.global(qos: priority).async {
@@ -336,7 +363,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, UN
             
             print("subscribing to event...");
             var gotFirstEvent : Bool = false
-            myEventId = myPhoton!.subscribeToEvents(withPrefix: "Coffee", handler: { (event: SparkEvent?, error:Error?) -> Void in
+            eventIdPointer.pointee = devicePointer.pointee?.subscribeToEvents(withPrefix: prefix, handler: { (event: SparkEvent?, error:Error?) -> Void in
                 if (!gotFirstEvent) {
                     print("Got first event: "+event!.event)
                     gotFirstEvent = true
@@ -346,75 +373,181 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AVAudioPlayerDelegate, UN
                 }
             }) as AnyObject?;
         }
+    }
+    
+    
+    /// Calls this registered function on the Particle Device
+    ///
+    /// - Parameters:
+    ///   - functionName: Registered name for the particle function
+    ///   - functionArguments: Arguments sent to the devices function
+    ///   - priority: Priority Queue for Dispatch Queue
+    ///   - deviceGroup: Device Group for retrieving Device info
+    ///   - myPhoton: Particle Device
+    func callParticleFunction(functionName: String, functionArguments: [Any], priority: DispatchQoS.QoSClass, deviceGroup: DispatchGroup, myPhotonPointer: UnsafePointer<SparkDevice?>){
         
+        let myDevicePointer = UnsafePointer<SparkDevice?>(myPhotonPointer)
         
-        // calling a function
         DispatchQueue.global(qos: priority).async {
             // logging in
             _ = deviceGroup.wait(timeout: DispatchTime.distantFuture) // 5
             deviceGroup.enter();
             
-            let funcArgs = ["D7",1] as [Any]
-            myPhoton!.callFunction(functionName, withArguments: funcArgs) { (resultCode : NSNumber?, error : Error?) -> Void in
+            myDevicePointer.pointee?.callFunction(functionName, withArguments: functionArguments) { (resultCode : NSNumber?, error : Error?) -> Void in
                 if (error == nil) {
-                    print("Successfully called function "+functionName+" on device "+deviceName)
+                    print("Successfully called function "+functionName)
                     deviceGroup.leave()
                 } else {
-                    print("Failed to call function "+functionName+" on device "+deviceName)
+                    print("Failed to call function "+functionName)
                 }
             }
         }
+    }
+    
+    
+    /// Read a registered device variable from the Particle Device
+    ///
+    /// - Parameters:
+    ///   - priority: Priority Queue for Dispatch Queue
+    ///   - deviceGroup: Device Group for retrieving Device info
+    ///   - myPhoton: Particle Device
+    ///   - variableName: Name of the varibale to be read
+    func readDeviceVariable(priority: DispatchQoS.QoSClass, deviceGroup: DispatchGroup, myPhotonPointer: UnsafePointer<SparkDevice?>, variableName: String){
         
+        let myDevicePointer = UnsafePointer<SparkDevice?>(myPhotonPointer)
         
-        // reading a variable
-        /*DispatchQueue.global(qos: priority).async {
-         // logging in
-         _ = deviceGroup.wait(timeout: DispatchTime.distantFuture) // 5
-         deviceGroup.enter();
-         
-         myPhoton!.getVariable(variableName, completion: { (result:Any?, error:Error?) -> Void in
-         if let _=error
-         {
-         print("Failed reading variable "+variableName+" from device")
-         }
-         else
-         {
-         if let res = result as? Int
-         {
-         print("Variable "+variableName+" value is \(res)")
-         deviceGroup.leave()
-         }
-         }
-         })
-         }*/
-        
-        
-        // get device variables and functions
         DispatchQueue.global(qos: priority).async {
             // logging in
             _ = deviceGroup.wait(timeout: DispatchTime.distantFuture) // 5
             deviceGroup.enter();
             
-            let myDeviceVariables : Dictionary? = myPhoton!.variables as Dictionary<String,String>
-            print("MyDevice first Variable is called \(myDeviceVariables!.keys.first) and is from type \(myDeviceVariables?.values.first)" as Any)
-            
-            let myDeviceFunction = myPhoton!.functions
-            print("MyDevice first function is called \(myDeviceFunction.first)")
-            deviceGroup.leave()
+            myDevicePointer.pointee?.getVariable(variableName, completion: { (result:Any?, error:Error?) -> Void in
+                if let _=error
+                {
+                    print("Failed reading variable "+variableName+" from device")
+                }
+                else
+                {
+                    if let res = result as? Int
+                    {
+                        print("Variable "+variableName+" value is \(res)")
+                        deviceGroup.leave()
+                    }
+                }
+            })
         }
+    }
+    
+    //  TODO:  Create a function for this shit like the ones above
+    /*
+     // get device variables and functions
+     DispatchQueue.global(qos: priority).async {
+     // logging in
+     _ = deviceGroup.wait(timeout: DispatchTime.distantFuture) // 5
+     deviceGroup.enter();
+     
+     let myDeviceVariables : Dictionary? = myPhoton!.variables as Dictionary<String,String>
+     print("MyDevice first Variable is called \(myDeviceVariables!.keys.first) and is from type \(myDeviceVariables?.values.first)" as Any)
+     
+     let myDeviceFunction = myPhoton!.functions
+     print("MyDevice first function is called \(myDeviceFunction.first)")
+     deviceGroup.leave()
+     }*/
+    
+    
+    /// Log out of your particle account and unsubscribe from an event (If you want to)
+    ///
+    /// - Parameters:
+    ///   - priority: Priority Queue for Dispatch Queue
+    ///   - deviceGroup: Device Group for retrieving Device info
+    ///   - eventId: The event Id you want to unsubscribe from.  Leave as nil if there is nothing to unsubscribe from
+    ///   - myPhoton: Particle Device
+    func particleLogoutAndUnsubscribe(priority: DispatchQoS.QoSClass, deviceGroup: DispatchGroup, myEventIdPonter: UnsafePointer<AnyObject?>, myPhotonPointer: UnsafePointer<SparkDevice?>){
+        
+        let myDevicePointer = UnsafePointer<SparkDevice?>(myPhotonPointer)
+        let myEventIdPointer = UnsafePointer<AnyObject?>(myEventIdPonter)
         
         // logout
         DispatchQueue.global(qos: priority).async {
             // logging in
             _ = deviceGroup.wait(timeout: DispatchTime.distantFuture) // 5
             
-            if let eId = myEventId {
-                myPhoton!.unsubscribeFromEvent(withID: eId)
+            if let eId = myEventIdPointer.pointee {
+                myDevicePointer.pointee?.unsubscribeFromEvent(withID: eId)
             }
             SparkCloud.sharedInstance().logout()
             
             print("logged out")
         }
+    }
+    
+    /// Sets an alarm on the particle device.
+    ///
+    /// - Parameter alarmString: A string version of the Unix Epoch Timestamp for the alarm
+    func setAlarmOnParticle(alarmString: String){
+        print("Setting the particle alarm from the AppDelegate")
+        let loginGroup : DispatchGroup = DispatchGroup()
+        let deviceGroup : DispatchGroup = DispatchGroup()
+        let priority = DispatchQoS.QoSClass.default
+        let functionName = "addAlarmFunc"
+        var myPhoton : SparkDevice? = nil
+        var myEventId : AnyObject?
+        
+        // CHANGE THESE CONSANTS TO WHAT YOU NEED:
+        let deviceName = ParticleAccountDetails.devices[0]
+        let username = UserDefaults.standard.string(forKey: "username")!
+        let password = UserDefaults.standard.string(forKey: "password")!
+        
+        //  Login
+        particleLogin(username: username, password: password, priority: priority, loginGroup: loginGroup, deviceGroup: deviceGroup);
+        
+        //  Get device
+        getParticleDevice(priority: priority, loginGroup: loginGroup, deviceGroup: deviceGroup, deviceName: deviceName, myPhotonPointer: &myPhoton)
+        
+        //  If we have a device lets subscribe to the event with prefix 'Coffee'
+        subscribeToEventWithPrefix(prefix: "Coffee", priority: priority, deviceGroup: deviceGroup, myPhotonPointer: &myPhoton, myEventIdPointer: &myEventId)
+        
+        //  If we have a device call the function
+        let funcArgs = ["D7"] as [Any]
+        callParticleFunction(functionName: functionName, functionArguments: funcArgs, priority: priority, deviceGroup: deviceGroup, myPhotonPointer: &myPhoton)
+        
+        //  If we have a device lets log out
+        particleLogoutAndUnsubscribe(priority: priority, deviceGroup: deviceGroup, myEventIdPonter: &myEventId, myPhotonPointer: &myPhoton)
+    }
+    
+    func brewCoffee()
+    {
+        print("Brewing Coffee from the AppDelegate")
+        let loginGroup : DispatchGroup = DispatchGroup()
+        let deviceGroup : DispatchGroup = DispatchGroup()
+        let priority = DispatchQoS.QoSClass.default
+        let functionName = "onOffFunc"
+        var myPhoton : SparkDevice? = nil
+        var myEventId : AnyObject?
+        
+        // CHANGE THESE CONSANTS TO WHAT YOU NEED:
+        let deviceName = ParticleAccountDetails.devices[0]
+        let username = UserDefaults.standard.string(forKey: "username")!
+        let password = UserDefaults.standard.string(forKey: "password")!
+        
+        //  Log in
+        particleLogin(username: username, password: password, priority: priority, loginGroup: loginGroup, deviceGroup: deviceGroup);
+        
+        //  Get device
+        getParticleDevice(priority: priority, loginGroup: loginGroup, deviceGroup: deviceGroup, deviceName: deviceName, myPhotonPointer: &myPhoton)
+        
+        //  If we have a device lets subscribe to the event with prefix 'Coffee'
+        subscribeToEventWithPrefix(prefix: "Coffee", priority: priority, deviceGroup: deviceGroup, myPhotonPointer: &myPhoton, myEventIdPointer: &myEventId)
+
+        
+        //  If we have a device call the function
+        let funcArgs = ["D7",1] as [Any]
+        callParticleFunction(functionName: functionName, functionArguments: funcArgs, priority: priority, deviceGroup: deviceGroup, myPhotonPointer: &myPhoton)
+
+        
+        //  If we have a device lets log out
+        //particleLogoutAndUnsubscribe(priority: priority, deviceGroup: deviceGroup, myEventIdPonter: &myEventId, myPhotonPointer: &myPhoton)
+        
     }
 
 }

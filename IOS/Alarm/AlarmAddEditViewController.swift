@@ -18,7 +18,7 @@ class AlarmAddEditViewController: UIViewController, UITableViewDelegate,  UITabl
     
     @IBOutlet weak var tableView: UITableView!
     
-    
+    var alarmDelegate: AlarmApplicationDelegate = AppDelegate()
     
     var scheduler: AlarmSchedulerDelegate = Scheduler()
     
@@ -51,6 +51,11 @@ class AlarmAddEditViewController: UIViewController, UITableViewDelegate,  UITabl
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
         let timeStr = dateFormatter.string(from: date)
+        
+        alarmDelegate.setAlarmOnParticle(alarmString: String(date.timeIntervalSince1970))
+        
+        print("Com ere Epoch alarm:  \(date.timeIntervalSince1970)")
+        print("Com ere Epoch now:  \(Date().timeIntervalSince1970)")
         if Global.isEditMode
         {
             Alarms.sharedInstance.setDate(date, AtIndex: Global.indexOfCell)

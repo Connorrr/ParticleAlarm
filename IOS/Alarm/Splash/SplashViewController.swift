@@ -115,17 +115,46 @@ class SplashViewController: UIViewController, HolderViewDelegate, UITextFieldDel
     
     //  Login to the the particle cloud server
     func particleLogin(){
-        let username: String! = self.uNameTextField.text
-        let password: String! = self.passwordTextField.text
+        
+        let defaults = UserDefaults.standard
+        var isNewAccount: Bool
+        
+        var username: String!
+        var password: String!
+        
+        if (defaults.string(forKey: "username") != nil){
+            username = defaults.string(forKey: "username")
+            password = defaults.string(forKey: "password")
+            isNewAccount = false
+        }else{
+            username = self.uNameTextField.text
+            password = self.passwordTextField.text
+            isNewAccount = true
+        }
+        
         ParticleAccountDetails.uName = username
         ParticleAccountDetails.pWord = password
         SparkCloud.sharedInstance().login(withUser: username, password: password) { (error:Error?) -> Void in
             if let e=error {
                 print("Wrong credentials or no internet connectivity, please try again")
                 dump(e)
+                if !isNewAccount {
+                    //  Remove out of date credentials
+                    let defaults = UserDefaults.standard
+                    
+                    defaults.removeObject(forKey: "username")
+                    defaults.removeObject(forKey: "password")
+                }
             }
             else {
                 print("Logged in")
+                if isNewAccount {
+                    //  Store credentials for future login
+                    let defaults = UserDefaults.standard
+                    
+                    defaults.set(username, forKey: "username")
+                    defaults.set(password, forKey: "password")
+                }
                 self.getDevices()
             }
         }
@@ -178,7 +207,15 @@ class SplashViewController: UIViewController, HolderViewDelegate, UITextFieldDel
         UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.1, options: UIViewAnimationOptions(), animations: ({
             letter.transform = letter.transform.scaledBy(x: 4.0, y: 4.0)
         }), completion: ({ finished in
-            self.addTextFields()
+            
+            let defaults = UserDefaults.standard
+            
+            if (defaults.string(forKey: "username") != nil){
+                self.particleLogin()
+            }else{
+                self.addTextFields()
+            }
+            
         }))
     }
     
